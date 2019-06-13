@@ -466,41 +466,32 @@ void add_torus( struct matrix * edges,
   }
   free_matrix(points);
 }
-void add_cone(struct matrix * polygons, double cx, double cy, double cz,double r1, double h, int step ) {
+
+void add_cone(struct matrix * polygons, double cx, double cy, double cz,double r, double h, int step ) {
   struct matrix * points = new_matrix(4,step * step);
   int circle, rot_start, rot_stop;
   add_point(points,cx,cy,cz+h);
-  double x,y,z,rot,circ;
+  double x,y,rot,circ,x1,x2,y1,y2;
   rot_start = 0;
   rot_stop = step;
-  x = cx + r;
-  y = cy;
-  z = cz;
-  add_point(points,x,y,z);
   for(int i = rot_start; i <rot_stop; i ++){
     circ = (double) i /step;
     y = r * sin(2 * M_PI * circ) + cy;
     x = r * cos(2 * M_PI * circ) + cx;
-    add_point(points,x,y,z);
+    add_point(points,x,y,cz);
   }
-  x0 = points->m[0][0];
-  y0 = points->m[1][0];
-  z0 = points->m[2][0];
-  for(int i = 1; i < step;i++){
+  for(int i = 0; i < step;i++){
     x1 = points->m[0][i];
     y1 = points->m[1][i];
-    z1 = points->m[2][i];
     if(i == step - 1){
       x2 = points->m[0][1];
       y2 = points->m[1][1];
-      z2 = points->m[2][1];
     }
     else{
       x2 = points->m[0][i+1];
       y2 = points->m[0][i+1];
-      z2 = points->m[0][i+1];
     }
-    add_polygon(polygons,x0,y0,z0,x1,y1,z1,x2,y2,z2);
+    add_polygon(polygons,cx,cy,cz+h,x1,y1,cz,x2,y2,cz);
   }
   free_matrix(points);
 }

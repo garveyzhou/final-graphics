@@ -58,6 +58,7 @@ void my_main() {
   zbuffer zb;
   color g;
   double step_3d = 20;
+  int axis;
   double theta;
 
   //Lighting values here for easy access
@@ -108,9 +109,101 @@ void my_main() {
 
   print_symtab();
   for (i=0;i<lastop;i++) {
+    tmp->lastcol = 0;
+    switch(op[i].opcode){
+      case PUSH:
+        push(systems);
+        break;
+      case POP:
+        pop(systems);
+        break;
+      case SPHERE:
+        add_sphere(tmp, op[i].op.sphere.d[0], op[i].op.sphere.d[1], op[i].op.sphere.d[2], op[i].op.sphere.r, step_3d);
+        matrix_mult(peek(systems), tmp);
+        if (op[i].op.sphere.constants == NULL){
+          reflect = &white;
+        }
+        else{
+          reflect = op[i].op.sphere.constants->s.c;
+        }
+        draw_polygons(tmp, t, zb, view, light, ambient, reflect);
+        break;
+      case BOX:
+        add_box(tmp, op[i].op.box.d0[0], op[i].op.box.d0[1], op[i].op.box.d0[2], op[i].op.box.d1[0], op[i].op.box.d1[1], op[i].op.box.d1[2]);
+        matrix_mult(peek(systems), tmp);
+        if (op[i].op.sphere.constants == NULL){
+          reflect = &white;
+        }
+        else{
+          reflect = op[i].op.sphere.constants->s.c;
+        }
+        draw_polygons(tmp, t, zb, view, light, ambient, reflect);
+        break;
+      case TORUS:
+        add_torus(tmp, op[i].op.torus.d[0], op[i].op.torus.d[1], op[i].op.torus.d[2], op[i].op.torus.r0, op[i].op.torus.r1, step_3d);
+        matrix_mult(peek(systems), tmp);
+        if (op[i].op.torus.constants == NULL){
+          reflect = &white;
+        }
+        else{
+          reflect = op[i].op.torus.constants->s.c;
+        }
+        draw_polygons(tmp, t, zb, view, light, ambient, reflect);
+        break;
+      /*
+      case CONE:
+        add_cone(polygons, op[i].op.cone.d[0],op[i].op.cone.d[1], op[i].op.cone.d[2],op[i].op.cone.r,op[i].op.cone.h, step_3d);
+      	matrix_mult( peek(systems), polygons );
+        reflect = &white;
+        if (op[i].op.cone.constants != NULL) {
+          reflect = op[i].op.cone.constants->s.c;
+        }
+        if (op[i].op.cone.cs != NULL){}
+      	draw_polygons(tmp, t, zb, view, light ,ambient,reflect);
+      	polygons->lastcol = 0;
+      	break;
+        */
+      case MOVE:
+        tmp = make_translate( op[i].op.move.d[0], op[i].op.move.d[1], op[i].op.move.d[2]);
+        matrix_mult(peek(systems), tmp);
+        copy_matrix(tmp, peek(systems));
+        break;
+      case SCALE:
+        tmp = make_scale( op[i].op.scale.d[0], op[i].op.scale.d[1], op[i].op.scale.d[2] );
+        matrix_mult(peek(systems), tmp);
+        copy_matrix(tmp, peek(systems));
+        break;
+      case ROTATE:
+        theta = op[i].op.rotate.degrees * M_PI / 180;
+        axis = op[i].op.rotate.axis;
+        if(axis == 0){
+          tmp = make_rotX(theta);
+        }
+        else if(axis == 1){
+          tmp = make_rotY(theta);
+        }
+        else if(axis == 2){
+          tmp = make_rotZ(theta);
+        }
+        matrix_mult(peek(systems), tmp);
+        copy_matrix(tmp, peek(systems));
+        break;
 
+      case SAVE:
+        save_extension(t,op[i].op.save.p->name);
+        break;
+      case DISPLAY:
+        display(t);
+        break;
+      case LINE:
+        add_edge(tmp, op[i].op.line.p0[0], op[i].op.line.p0[1], op[i].op.line.p0[2], op[i].op.line.p1[0], op[i].op.line.p1[1], op[i].op.line.p1[2]);
+        matrix_mult(peek(systems), tmp);
+        draw_lines(tmp, t, zb, g);
+        break;
+      default:
+      break;
+    }
     printf("%d: ",i);
-
     printf("\n");
   }
 }
