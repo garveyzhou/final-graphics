@@ -6,6 +6,5 @@
 #include "draw.h"
 
 void parse_file(struct matrix *polygons, char *file);
-void add_mesh(struct matrix *polygons, struct matrix *vertices, struct matrix *faces);
 
 #endif

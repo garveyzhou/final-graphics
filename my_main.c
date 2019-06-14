@@ -150,7 +150,17 @@ void my_main() {
         }
         draw_polygons(tmp, t, zb, view, light, ambient, reflect);
         break;
-
+      case MESH:
+          parse_line(tmp,op[i].op.mesh.name);
+          matrix_mult(peek(systems),tmp);
+          if(op[i].op.mesh.constants == NULL){
+            reflect = &white;
+          }
+          else{
+            reflect = op[i].op.mesh.constants->s.c
+          }
+          draw_polygons(tmp, t, zb, view, light, ambient, reflect);
+          break;
       case CONE:
         add_cone(tmp, op[i].op.cone.d[0],op[i].op.cone.d[1], op[i].op.cone.d[2],op[i].op.cone.r,op[i].op.cone.h, step_3d);
       	matrix_mult( peek(systems), tmp );
@@ -172,6 +182,7 @@ void my_main() {
         matrix_mult(peek(systems), tmp);
         copy_matrix(tmp, peek(systems));
         break;
+
       case ROTATE:
         theta = op[i].op.rotate.degrees * M_PI / 180;
         axis = op[i].op.rotate.axis;

@@ -6,19 +6,19 @@
 #include "matrix.h"
 #include "draw.h"
 
-char * parse(char *line) {
+char * parse_args(char *line) {
   char * s = calloc (sizeof(char), 1);
-  strcpy(s, strsep(&line, " "));
+  strcpy(s, strsep(&line, "/"));
   return s;
 }
 
-char ** parse_args(char *line){
+char ** parse_line(char *line){
   char ** arr = calloc(sizeof(char*), 10);
   int i = 0;
   while (line) {
     arr[i] = strsep(&line, " ");
     if (strlen(arr[i]) != 0) {
-      arr[i] = parse(arr[i]);
+      arr[i] = parse_args(arr[i]);
       i++;
     }
   }
@@ -43,7 +43,7 @@ void parse_file(struct matrix * polygons, char * file){
     }
 
     else if (strncmp(line, "f", 1) == 0) {
-      args = parse_args(line);
+      args = parse_line(line);
       int i = 0;
       while (args[i+1] && (i < 4)) {
         values[i] = atof(args[i+1]);
@@ -54,6 +54,21 @@ void parse_file(struct matrix * polygons, char * file){
     }
   }
 
-
-
+  double v0,v1,v2,v3;
+  for(int i = 0; i < faces->lastcol; i ++){
+    v0 = ((int) faces->m[0][i]) - 1;
+    v1 = ((int) faces->m[1][i]) - 1;
+    v2 = ((int) faces->m[2][i]) - 1;
+    v3 = ((int) faces->m[3][i]) - 1;
+  add_polygon(polygons, vertices->m[0][v0], vertices->m[1][v0], vertices->m[2][v0],
+                        vertices->m[0][v1], vertices->m[1][v1], vertices->m[2][v1],
+                        vertices->m[0][v2], vertices->m[1][v2], vertices->m[2][v2]);
+    if (v3 > 0) {
+      add_polygon(polygons, vertices->m[0][v0], vertices->m[1][v0], vertices->m[2][v0],
+                            vertices->m[0][v2], vertices->m[1][v2], vertices->m[2][v2],
+                            vertices->m[0][v3], vertices->m[1][v3], vertices->m[2][v3]);
+    }
+  }
+  free_matrix(vertices);
+  free_matrix(faces);
 }
