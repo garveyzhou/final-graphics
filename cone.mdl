@@ -1,0 +1,7 @@
+constants teal 0.3 0.0 0.0 0.3 0.2 0.8 0.3 0.2 0.8
+
+push
+move 250 250 0
+rotate x 90
+cone 0 0 0 50 100
+display

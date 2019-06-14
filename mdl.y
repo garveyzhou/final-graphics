@@ -166,39 +166,6 @@ TORUS STRING DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE STRING
 
   lastop++;
 }|
-CONE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
-{  op[lastop].opcode = CONE;
-
-  lineno++;
-  op[lastop].opcode = CONE;
-  op[lastop].op.cone.d[0] = $2;
-  op[lastop].op.cone.d[1] = $3;
-  op[lastop].op.cone.d[2] = $4;
-  op[lastop].op.cone.d[3] = 0;
-  op[lastop].op.cone.r = $5;
-  op[lastop].op.cone.h = $6;
-  op[lastop].op.cone.constants = NULL;
-  op[lastop].op.cone.cs = NULL;
-
-  lastop++;
-}|
-
-CONE STRING DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
-{
-  lineno++;
-  op[lastop].opcode = CONE;
-  op[lastop].op.cone.d[0] = $3;
-  op[lastop].op.cone.d[1] = $4;
-  op[lastop].op.cone.d[2] = $5;
-  op[lastop].op.cone.d[3] = 0;
-  op[lastop].op.cone.r = $6;
-  op[lastop].op.cone.h = $7;
-  op[lastop].op.cone.cs = NULL;
-  c = (struct constants *)malloc(sizeof(struct constants));
-  op[lastop].op.cone.constants = add_symbol($2,SYM_CONSTANTS,c);
-
-  lastop++;
-}|
 
 BOX DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
 {
@@ -269,6 +236,37 @@ BOX STRING DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE STRING
   m = (struct matrix *)new_matrix(4,4);
   op[lastop].op.box.cs = add_symbol($9,SYM_MATRIX,m);
 
+  lastop++;
+}|
+
+CONE DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
+{
+  lineno++;
+  op[lastop].opcode = CONE;
+  op[lastop].op.cone.d[0] = $2;
+  op[lastop].op.cone.d[1] = $3;
+  op[lastop].op.cone.d[2] = $4;
+  op[lastop].op.cone.d[3] = 0;
+  op[lastop].op.cone.r = $5;
+  op[lastop].op.cone.h = $6;
+  op[lastop].op.cone.constants = NULL;
+  op[lastop].op.cone.cs = NULL;
+
+  lastop++;
+}|
+CONE STRING DOUBLE DOUBLE DOUBLE DOUBLE DOUBLE
+{
+  lineno++;
+  op[lastop].opcode = CONE;
+  op[lastop].op.cone.d[0] = $3;
+  op[lastop].op.cone.d[1] = $4;
+  op[lastop].op.cone.d[2] = $5;
+  op[lastop].op.cone.d[3] = 0;
+  op[lastop].op.cone.r = $6;
+  op[lastop].op.cone.h = $7;
+  c = (struct constants *)malloc(sizeof(struct constants));
+  op[lastop].op.cone.constants = add_symbol($2,SYM_CONSTANTS,c);
+  op[lastop].op.cone.cs = NULL;
   lastop++;
 }|
 
@@ -823,11 +821,9 @@ int main(int argc, char **argv) {
   yyin = fopen(argv[1],"r");
 
   yyparse();
-  //COMMENT OUT PRINT_PCODE AND UNCOMMENT
-  //MY_MAIN IN ORDER TO RUN YOUR CODE
 
-  print_pcode();
-  //my_main();
+  //print_pcode();
+  my_main();
 
   return 0;
 }

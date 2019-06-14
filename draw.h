@@ -31,6 +31,8 @@ struct matrix * generate_sphere(double cx, double cy, double cz,
 void add_torus( struct matrix * edges,
                 double cx, double cy, double cz,
                 double r1, double r2, int step );
+void add_cone(struct matrix * polygons, double cx, double cy, double cz, double r , double h, int step);
+
 struct matrix * generate_torus( double cx, double cy, double cz,
                                 double r1, double r2, int step );
 

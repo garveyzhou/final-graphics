@@ -468,32 +468,25 @@ void add_torus( struct matrix * edges,
 }
 
 void add_cone(struct matrix * polygons, double cx, double cy, double cz,double r, double h, int step ) {
-  struct matrix * points = new_matrix(4,step * step);
-  int circle, rot_start, rot_stop;
-  add_point(points,cx,cy,cz+h);
-  double x,y,rot,circ,x1,x2,y1,y2;
-  rot_start = 0;
-  rot_stop = step;
-  for(int i = rot_start; i <rot_stop; i ++){
+  struct matrix * points = new_matrix(4 step * step);
+  double vert,x,y,z,circ;
+  double x0,z0,x1,z1;
+  vert = cy + h;
+  for(int i = 0; i <step; i++){
     circ = (double) i /step;
-    y = r * sin(2 * M_PI * circ) + cy;
-    x = r * cos(2 * M_PI * circ) + cx;
-    add_point(points,x,y,cz);
+    x = r*cos(2* M_PI * circ) + cx;
+    z = r*sin(2* M_PI * circ)+ cz;
+    add_point(points,x,cy,z);
   }
-  for(int i = 0; i < step;i++){
-    x1 = points->m[0][i];
-    y1 = points->m[1][i];
-    if(i == step - 1){
-      x2 = points->m[0][1];
-      y2 = points->m[1][1];
-    }
-    else{
-      x2 = points->m[0][i+1];
-      y2 = points->m[0][i+1];
-    }
-    add_polygon(polygons,cx,cy,cz+h,x1,y1,cz,x2,y2,cz);
+  for(int i = 1; i <= step; i++){
+    x0 = points->m[0][i];
+    z0 = points->m[2][i];
+    x1 = points->m[0][i-1];
+    z1 = points->m[2][i-1];
+    add_polygon(polygons,cx,vert,cz,x1,cy,z1,x0,cy,z1);//sides
+    add_polygon(polygons,x0,cy,z0,x1,cy,z1,cx,cy,cz);//base
   }
-  free_matrix(points);
+  free_matrix(points)
 }
 
 /*======== void generate_torus() ==========

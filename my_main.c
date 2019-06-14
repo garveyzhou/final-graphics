@@ -57,7 +57,7 @@ void my_main() {
   screen t;
   zbuffer zb;
   color g;
-  double step_3d = 20;
+  double step_3d = 50;
   int axis;
   double theta;
 
@@ -150,19 +150,18 @@ void my_main() {
         }
         draw_polygons(tmp, t, zb, view, light, ambient, reflect);
         break;
-      /*
+
       case CONE:
-        add_cone(polygons, op[i].op.cone.d[0],op[i].op.cone.d[1], op[i].op.cone.d[2],op[i].op.cone.r,op[i].op.cone.h, step_3d);
-      	matrix_mult( peek(systems), polygons );
-        reflect = &white;
-        if (op[i].op.cone.constants != NULL) {
+        add_cone(tmp, op[i].op.cone.d[0],op[i].op.cone.d[1], op[i].op.cone.d[2],op[i].op.cone.r,op[i].op.cone.h, step_3d);
+      	matrix_mult( peek(systems), tmp );
+        if (op[i].op.cone.constants == NULL) {
+          reflect = &white;
+        }
+        else{
           reflect = op[i].op.cone.constants->s.c;
         }
-        if (op[i].op.cone.cs != NULL){}
       	draw_polygons(tmp, t, zb, view, light ,ambient,reflect);
-      	polygons->lastcol = 0;
       	break;
-        */
       case MOVE:
         tmp = make_translate( op[i].op.move.d[0], op[i].op.move.d[1], op[i].op.move.d[2]);
         matrix_mult(peek(systems), tmp);
@@ -192,6 +191,7 @@ void my_main() {
       case SAVE:
         save_extension(t,op[i].op.save.p->name);
         break;
+
       case DISPLAY:
         display(t);
         break;

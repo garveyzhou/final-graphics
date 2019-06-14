@@ -67,6 +67,12 @@ struct command
       double p0[4],p1[4];
       SYMTAB *cs0,*cs1;
     } line;
+    struct{
+      SYMTAB *constants;
+      double d[3];
+      double r,h;
+      SYMTAB *cs;
+    } cone;
     struct {
       SYMTAB *constants;
       char name[255];
