@@ -151,13 +151,13 @@ void my_main() {
         draw_polygons(tmp, t, zb, view, light, ambient, reflect);
         break;
       case MESH:
-          parse_line(tmp,op[i].op.mesh.name);
+          parse_file(tmp,op[i].op.mesh.name);
           matrix_mult(peek(systems),tmp);
           if(op[i].op.mesh.constants == NULL){
             reflect = &white;
           }
           else{
-            reflect = op[i].op.mesh.constants->s.c
+            reflect = op[i].op.mesh.constants->s.c;
           }
           draw_polygons(tmp, t, zb, view, light, ambient, reflect);
           break;

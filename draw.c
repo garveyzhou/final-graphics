@@ -468,7 +468,7 @@ void add_torus( struct matrix * edges,
 }
 
 void add_cone(struct matrix * polygons, double cx, double cy, double cz,double r, double h, int step ) {
-  struct matrix * points = new_matrix(4 step * step);
+  struct matrix * points = new_matrix(4, step * step);
   double vert,x,y,z,circ;
   double x0,z0,x1,z1;
   vert = cy + h;
@@ -486,7 +486,7 @@ void add_cone(struct matrix * polygons, double cx, double cy, double cz,double r
     add_polygon(polygons,cx,vert,cz,x1,cy,z1,x0,cy,z1);//sides
     add_polygon(polygons,x0,cy,z0,x1,cy,z1,cx,cy,cz);//base
   }
-  free_matrix(points)
+  free_matrix(points);
 }
 
 /*======== void generate_torus() ==========

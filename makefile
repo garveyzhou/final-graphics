@@ -32,8 +32,8 @@ display.o: display.c display.h ml6.h matrix.h
 	$(CC) $(CFLAGS) -c display.c
 
 mesh.o: mesh.c mesh.h matrix.h draw.h
-  $(CC) $(CFLAGS) -c mesh.c
-	
+	$(CC) $(CFLAGS) -c mesh.c
+
 draw.o: draw.c draw.h display.h ml6.h matrix.h gmath.h
 	$(CC) $(CFLAGS) -c draw.c
 

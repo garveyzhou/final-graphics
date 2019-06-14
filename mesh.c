@@ -54,7 +54,7 @@ void parse_file(struct matrix * polygons, char * file){
     }
   }
 
-  double v0,v1,v2,v3;
+  int v0,v1,v2,v3;
   for(int i = 0; i < faces->lastcol; i ++){
     v0 = ((int) faces->m[0][i]) - 1;
     v1 = ((int) faces->m[1][i]) - 1;
