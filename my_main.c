@@ -48,7 +48,7 @@
 #include "draw.h"
 #include "stack.h"
 #include "gmath.h"
-
+#include "mesh.h"
 void my_main() {
 
   int i;
