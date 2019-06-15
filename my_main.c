@@ -57,7 +57,7 @@ void my_main() {
   screen t;
   zbuffer zb;
   color g;
-  double step_3d = 50;
+  double step_3d = 75;
   int axis;
   double theta;
 
@@ -72,7 +72,7 @@ void my_main() {
   light[LOCATION][1] = 0.75;
   light[LOCATION][2] = 1;
 
-  light[COLOR][RED] = 0;
+  light[COLOR][RED] = 255;
   light[COLOR][GREEN] = 255;
   light[COLOR][BLUE] = 255;
 
@@ -182,7 +182,6 @@ void my_main() {
         matrix_mult(peek(systems), tmp);
         copy_matrix(tmp, peek(systems));
         break;
-
       case ROTATE:
         theta = op[i].op.rotate.degrees * M_PI / 180;
         axis = op[i].op.rotate.axis;
